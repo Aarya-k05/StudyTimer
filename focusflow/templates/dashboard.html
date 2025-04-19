@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FocusFlow Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Dashboard</h2>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        
+        <h3>Today's Sessions</h3>
+        {% if sessions %}
+        <table>
+            <tr>
+                <th>Subject</th>
+                <th>Study Time (min)</th>
+                <th>Timestamp</th>
+            </tr>
+            {% for s in sessions %}
+            <tr>
+                <td>{{ s.subject }}</td>
+                <td>{{ s.study_time }}</td>
+                <td>{{ s.timestamp.strftime('%Y-%m-%d %H:%M:%S') if s.timestamp else '' }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+          <p>No sessions logged for today.</p>
+        {% endif %}
+        
+        <h3>Weekly Stats</h3>
+        {% if weekly_stats %}
+        <table>
+            <tr>
+                <th>Day</th>
+                <th>Total Study Time (min)</th>
+                <th>Session Count</th>
+            </tr>
+            {% for day, stats in weekly_stats.items() %}
+            <tr>
+                <td>{{ day }}</td>
+                <td>{{ stats.total_study_time }}</td>
+                <td>{{ stats.session_count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+          <p>No session data for this week.</p>
+        {% endif %}
+        
+        <a href="{{ url_for('index') }}">Start a New Session</a>
+        <a href="{{ url_for('stats') }}">View Detailed Stats</a>
+    </div>
+</body>
+</html>
